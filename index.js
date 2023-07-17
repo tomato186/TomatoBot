@@ -9,7 +9,7 @@ const { Routes } = require('discord-api-types/v9');
 // When the client is ready, run this code (only once)
 let token =''
 client.commands = new Collection();
-
+let commandsData = []
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 const commands = [];
@@ -19,7 +19,11 @@ for (const file of commandFiles) {
 	// Set a new item in the Collection
 	// With the key as the command name and the value as the exported module
     commands.push(command.data.toJSON());
-
+commandsData.push({
+	name:command.data.name,
+    description:command.data.description,
+	type:command.type,
+})
     client.commands.set(command.data.name, command);
 }
 client.menus = new Collection();
@@ -82,6 +86,17 @@ client.on('interactionCreate', async interaction => {
 
 	try {
 		await command.execute(interaction,client);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+}else if (interaction.isSelectMenu()) {
+	const menu = client.menus.get(interaction.customId);
+
+	if (!menu) return;
+
+	try {
+		await menu.execute(interaction,client);
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });

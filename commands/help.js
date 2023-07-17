@@ -5,6 +5,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('help')
 		.setDescription('send help list for you'),
+        type:"owner",
 	async execute(interaction,client) {
 		
         const row = new MessageActionRow()
@@ -32,6 +33,6 @@ module.exports = {
 
                 ]),
         );
-        await interaction.reply({ content: 'Pong!', components: [row] });
+        await interaction.reply({ content: 'اختر عنصر من القائمه وسوف تصلك رساله بالاوامر', components: [row] });
 	},
 };
