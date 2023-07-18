@@ -5,17 +5,18 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('set-username')
-		.setDescription('set bot username')
-        .addStringOption(option => option.setName('username').setDescription('Enter a username')),
+		.setName('set-avatar')
+		.setDescription('set bot avatar')
+        .addAttachmentOption(option => option.setName('avatar').setDescription('put the avatar'))
+        .addStringOption(option => option.setName('url').setDescription('Enter a url avatar')),
 		type:"owner",
 	async execute(interaction,client,content) {
-let cont = content || interaction.options.getString('username');
+let cont = content || interaction.attachments&& interaction.attachments.first().url || interaction.options.getString('url') || interaction.options.getAttachment('avatar').url;
+;
 console.log(cont)
         const jsonData = fs.readFileSync('config.json');
 var data = JSON.parse(jsonData);
-var lastUsageTime = data.TimerUsername
-
+var lastUsageTime = data.TimerAvatar
 		var currentTime = new Date().getTime();
 
   // تحقق مما إذا كان الوقت الحالي بعد الوقت المسموح به
@@ -24,13 +25,19 @@ var lastUsageTime = data.TimerUsername
    
     const exampleEmbed = new MessageEmbed()
     .setColor('#0099ff')
-    .setTitle(`تغيير الاسم`)
-    .setDescription(`تم تغيير اسم البوت بنجاح الئ ${cont}`)
+    .setTitle(`تغيير الصوره`)
+    .setDescription(`تم تغيير صوره البوت بنجاح الئ `)
+    .setImage(cont)
     .setTimestamp();
-    client.user.setUsername(`${cont}`)
-        await interaction.reply({embeds:[exampleEmbed] });
-    // قم بتحديث وقت الاستخدام الأخير
-    data.TimerUsername = currentTime;
+    
+        
+        client.user.setAvatar(cont).then(async ()=>{
+            await interaction.reply({embeds:[exampleEmbed] });
+        }).catch(x=>{
+    console.log(x)
+        })
+        
+    data.TimerAvatar = currentTime;
 
     // قم بتحديث الملف JSON مع الوقت الحالي
     
@@ -41,7 +48,7 @@ var lastUsageTime = data.TimerUsername
 
     const exampleEmbed = new MessageEmbed()
     .setColor('#0099ff')
-    .setTitle(`تغيير الاسم`)
+    .setTitle(`تغيير الصوره`)
     .setDescription(`عذرا تم استخدام الامر مسبقا يرجئ انتظار مده قدرها
     <t:${time}:R>`)
     .setTimestamp();
