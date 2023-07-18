@@ -7,7 +7,7 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_M
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 // When the client is ready, run this code (only once)
-let token =''
+let token ='MTEyNDQ1Njc5MDM2MTM3ODg2OA.GTExDN.pPXulu-2LFhGawxfJqtfckmz9JwNWW6XOvbrgs'
 client.commands = new Collection();
 let commandsData = []
 const commandsPath = path.join(__dirname, 'commands');
@@ -69,7 +69,7 @@ client.on("messageCreate",async interaction=>{
 	if (!command) return;
 
 	try {
-		await command.execute(interaction,client);
+		await command.execute(interaction,client,content);
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });

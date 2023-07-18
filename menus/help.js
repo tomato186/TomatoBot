@@ -25,8 +25,7 @@ const exampleEmbed = new MessageEmbed()
 	.setTitle(`This is a ${value} commands`)
 	.setDescription(commandsData||'i cant fouand any commands')
 	.setTimestamp()
-	.setAuthor({ text:`${client.user.username}.`, iconURL: client.user.avatarURL({dynamic:true}) })
-	.setFooter({ text:`${client.user.username}.`, iconURL: client.user.avatarURL({dynamic:true}) })
+	
 			await interaction.reply({embeds:[exampleEmbed] });
 	},
 };
