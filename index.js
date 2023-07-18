@@ -60,6 +60,10 @@ client.on('ready', () => {
 })();
 });
 client.on("messageCreate",async interaction=>{
+	const jsonData = fs.readFileSync('config.json');
+	var data = JSON.parse(jsonData);
+	
+	if(interaction.content.split('')[0] == data.prefix){
     let commandname = interaction.content.slice(1).split(" ")[0]
     let content = interaction.content.slice(1).split(" ").slice(1).join(' ')
    
@@ -73,7 +77,7 @@ client.on("messageCreate",async interaction=>{
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
-})
+}})
 client.on('interactionCreate', async interaction => {
 	if (interaction.isCommand()){
 
