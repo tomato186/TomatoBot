@@ -1,4 +1,4 @@
-const { Client, Intents,Collection } = require('discord.js');
+const { Client, Intents,Collection ,MessageEmbed} = require('discord.js');
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -68,15 +68,35 @@ client.on("messageCreate",async interaction=>{
     let content = interaction.content.slice(1).split(" ").slice(1).join(' ')
    
     const command = client.commands.get(commandname);
-
+	
 	if (!command) return;
-
+if (commandsData.find(x=>x.name == commandname).type == "owner") {
+	if (data.Owners.includes(interaction.member.id) || data.owner == interaction.member.id) {
+		try {
+			await command.execute(interaction,client,content);
+		} catch (error) {
+			console.error(error);
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
+	} else {
+		const exampleEmbed = new MessageEmbed()
+		.setColor('#0099ff')
+		.setTitle("عذرا ")
+		.setDescription(`هاذ الامر فقط الاونرز `)
+		.setTimestamp();
+		
+			await interaction.reply({embeds:[exampleEmbed] });
+	}
+} else {
 	try {
 		await command.execute(interaction,client,content);
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
+}
+	
+	
 }})
 client.on('interactionCreate', async interaction => {
 	if (interaction.isCommand()){
@@ -87,12 +107,32 @@ client.on('interactionCreate', async interaction => {
 
 	if (!command) return;
 
+	if (!command) return;
+if (commandsData.find(x=>x.name == interaction.commandName).type == "owner") {
+	if (data.Owners.includes(interaction.member.id)||data.owner == interaction.member.id) {
+		try {
+			await command.execute(interaction,client);
+		} catch (error) {
+			console.error(error);
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
+	} else {
+		const exampleEmbed = new MessageEmbed()
+		.setColor('#0099ff')
+		.setTitle("عذرا ")
+		.setDescription(`هاذ الامر فقط الاونرز `)
+		.setTimestamp();
+		
+			await interaction.reply({embeds:[exampleEmbed] });
+	}
+} else {
 	try {
-		await command.execute(interaction,client);
+		await command.execute(interaction,client,content);
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
+}
 }else if (interaction.isSelectMenu()) {
 	const menu = client.menus.get(interaction.customId);
 

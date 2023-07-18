@@ -5,6 +5,7 @@ const { MessageActionRow, MessageSelectMenu , MessageEmbed } = require('discord.
 module.exports = {
 	name:'help',
 	async execute(interaction,client) {
+		await interaction.message.delete()
 		let value = interaction.values[0]
 		let commandsData = ``
 const commandsPath = path.join(__dirname, '../commands');
@@ -19,13 +20,13 @@ for (const file of commandFiles) {
 	}
   
 }
-console.log(client.user)
+
 const exampleEmbed = new MessageEmbed()
 	.setColor('#0099ff')
 	.setTitle(`This is a ${value} commands`)
 	.setDescription(commandsData||'i cant fouand any commands')
 	.setTimestamp()
 	
-			await interaction.reply({embeds:[exampleEmbed] });
+			await interaction.channel.send({embeds:[exampleEmbed] , });
 	},
 };

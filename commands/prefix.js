@@ -7,7 +7,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('set-prefix')
 		.setDescription('set bot prefix')
-        .addStringOption(option => option.setName('prefix').setDescription('Enter a prefix')),
+        .addStringOption(option => option.setName('prefix').setDescription('Enter a prefix').setRequired(true)),
 		type:"owner",
 	async execute(interaction,client,content) {
 let cont = content || interaction.options.getString('prefix');
@@ -16,8 +16,7 @@ console.log(cont)
 var data = JSON.parse(jsonData);
 var lastUsageTime = data.TimerPrefix
 		var currentTime = new Date().getTime();
-
-  // تحقق مما إذا كان الوقت الحالي بعد الوقت المسموح به
+if (cont) {
   if (currentTime - lastUsageTime >= 2* 60 * 1000 || lastUsageTime == 0) {
     // تم تجاوز المدة المسموح بها، قم بتنفيذ الفعل هنا
    
@@ -48,5 +47,16 @@ data.prefix = cont
         await interaction.reply({embeds:[exampleEmbed] });
   
   }
+} else {
+  const exampleEmbed = new MessageEmbed()
+  .setColor('#0099ff')
+  .setTitle(`تغيير البريفيكس`)
+  .setDescription(`عذرا يجب عليك كتابه برفييكس مكون من حرف واحد علئ الاقل`)
+  .setTimestamp();
+  
+      await interaction.reply({embeds:[exampleEmbed] });
+}
+  // تحقق مما إذا كان الوقت الحالي بعد الوقت المسموح به
+ 
 	},
 };

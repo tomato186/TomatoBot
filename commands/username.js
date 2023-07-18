@@ -7,7 +7,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('set-username')
 		.setDescription('set bot username')
-        .addStringOption(option => option.setName('username').setDescription('Enter a username')),
+        .addStringOption(option => option.setName('username').setDescription('Enter a username').setRequired(true)),
 		type:"owner",
 	async execute(interaction,client,content) {
 let cont = content || interaction.options.getString('username');
@@ -17,8 +17,7 @@ var data = JSON.parse(jsonData);
 var lastUsageTime = data.TimerUsername
 
 		var currentTime = new Date().getTime();
-
-  // تحقق مما إذا كان الوقت الحالي بعد الوقت المسموح به
+if (cont && cont.length > 3) {
   if (currentTime - lastUsageTime >= 2*60* 60 * 1000 || lastUsageTime == 0) {
     // تم تجاوز المدة المسموح بها، قم بتنفيذ الفعل هنا
    
@@ -49,5 +48,16 @@ var lastUsageTime = data.TimerUsername
         await interaction.reply({embeds:[exampleEmbed] });
   
   }
+} else {
+  const exampleEmbed = new MessageEmbed()
+  .setColor('#0099ff')
+  .setTitle(`تغيير الاسم`)
+  .setDescription(`عذرا يجب عليك كتابه اسم مكون من 4 حروف علئ لاقل`)
+  .setTimestamp();
+  
+      await interaction.reply({embeds:[exampleEmbed] });
+}
+  // تحقق مما إذا كان الوقت الحالي بعد الوقت المسموح به
+  
 	},
 };

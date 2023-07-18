@@ -18,43 +18,53 @@ console.log(cont)
 var data = JSON.parse(jsonData);
 var lastUsageTime = data.TimerAvatar
 		var currentTime = new Date().getTime();
-
-  // تحقق مما إذا كان الوقت الحالي بعد الوقت المسموح به
-  if (currentTime - lastUsageTime >= 2*60* 60 * 1000 || lastUsageTime == 0) {
-    // تم تجاوز المدة المسموح بها، قم بتنفيذ الفعل هنا
-   
-    const exampleEmbed = new MessageEmbed()
-    .setColor('#0099ff')
-    .setTitle(`تغيير الصوره`)
-    .setDescription(`تم تغيير صوره البوت بنجاح الئ `)
-    .setImage(cont)
-    .setTimestamp();
-    
+if (cont) {
+    if (currentTime - lastUsageTime >= 2*60* 60 * 1000 || lastUsageTime == 0) {
+        // تم تجاوز المدة المسموح بها، قم بتنفيذ الفعل هنا
+       
+        const exampleEmbed = new MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle(`تغيير الصوره`)
+        .setDescription(`تم تغيير صوره البوت بنجاح الئ `)
+        .setImage(cont)
+        .setTimestamp();
         
-        client.user.setAvatar(cont).then(async ()=>{
+            
+            client.user.setAvatar(cont).then(async ()=>{
+                await interaction.reply({embeds:[exampleEmbed] });
+            }).catch(x=>{
+        console.log(x)
+            })
+            
+        data.TimerAvatar = currentTime;
+    
+        // قم بتحديث الملف JSON مع الوقت الحالي
+        
+        fs.writeFileSync('config.json', JSON.stringify(data));
+      } else {
+        let time =Math.floor((lastUsageTime + 2*60*60 * 1000 ) / 1000)
+        // لم يتم السماح باستخدام الفعل حاليًا، يمكنك اتخاذ إجراء آخر هنا
+    
+        const exampleEmbed = new MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle(`تغيير الصوره`)
+        .setDescription(`عذرا تم استخدام الامر مسبقا يرجئ انتظار مده قدرها
+        <t:${time}:R>`)
+        .setTimestamp();
+        
             await interaction.reply({embeds:[exampleEmbed] });
-        }).catch(x=>{
-    console.log(x)
-        })
-        
-    data.TimerAvatar = currentTime;
-
-    // قم بتحديث الملف JSON مع الوقت الحالي
-    
-    fs.writeFileSync('config.json', JSON.stringify(data));
-  } else {
-    let time =Math.floor((lastUsageTime + 2*60*60 * 1000 ) / 1000)
-    // لم يتم السماح باستخدام الفعل حاليًا، يمكنك اتخاذ إجراء آخر هنا
-
+      
+      }
+} else {
     const exampleEmbed = new MessageEmbed()
     .setColor('#0099ff')
-    .setTitle(`تغيير الصوره`)
-    .setDescription(`عذرا تم استخدام الامر مسبقا يرجئ انتظار مده قدرها
-    <t:${time}:R>`)
+    .setTitle(`تغيير افتار`)
+    .setDescription(`عذرا يجب عليك علئ لاقل كتابه رابط صوره او ارسال صوره`)
     .setTimestamp();
     
         await interaction.reply({embeds:[exampleEmbed] });
-  
-  }
+}
+  // تحقق مما إذا كان الوقت الحالي بعد الوقت المسموح به
+ 
 	},
 };
