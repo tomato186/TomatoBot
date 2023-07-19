@@ -40,6 +40,20 @@ for (const file of menuFiles) {
 
     client.menus.set(menu.name, menu);
 }
+client.modal = new Collection();
+
+const modalPath = path.join(__dirname, 'modals');
+const modalFiles = fs.readdirSync(modalPath).filter(file => file.endsWith('.js'));
+
+for (const file of modalFiles) {
+	const filePath = path.join(modalPath, file);
+	const modal = require(filePath);
+	// Set a new item in the Collection
+	// With the key as the command name and the value as the exported module
+   
+
+    client.modal.set(modal.name, modal);
+}
 client.on('ready', () => {
 	console.log('Ready!');
     const rest = new REST({ version: '9' }).setToken(token);
@@ -140,6 +154,17 @@ if (commandsData.find(x=>x.name == interaction.commandName).type == "owner") {
 
 	try {
 		await menu.execute(interaction,client);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+}else if (interaction.isModalSubmit()) {
+	const modal = client.modal.get(interaction.customId);
+
+	if (!modal) return;
+
+	try {
+		await modal.execute(interaction,client);
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
