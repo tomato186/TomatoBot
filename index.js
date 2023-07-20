@@ -84,23 +84,34 @@ client.on("messageCreate",async interaction=>{
     const command = client.commands.get(commandname);
 	
 	if (!command) return;
-if (commandsData.find(x=>x.name == commandname).type == "owner") {
-	if (data.Owners.includes(interaction.member.id) || data.owner == interaction.member.id) {
+	let typess = ['owner','manager','admin']
+	
+if (typess.includes(commandsData.find(x=>x.name == commandname).type)) {
+	let typesss = [{name:"Owners",type:"owner"},{name:"Managers",type:"manager"},{name:"Admins",type:"admin"}]
+	let type = commandsData.find(x=>x.name == commandname).type
+	console.log(type)
+
+	console.log(typesss.find(x=>x.type == type).name)
+	let roles = interaction.member.roles.member._roles
+	console.log(roles)
+	if (data[typesss.find(x=>x.type == type).name].includes(interaction.member.id) || roles.some(element => data[typesss.find(x=>x.type == type).name].includes(element))) {
 		try {
 			await command.execute(interaction,client,content);
 		} catch (error) {
 			console.error(error);
 			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 		}
-	} else {
-		const exampleEmbed = new MessageEmbed()
-		.setColor('#0099ff')
-		.setTitle("عذرا ")
-		.setDescription(`هاذ الامر فقط الاونرز `)
-		.setTimestamp();
-		
-			await interaction.reply({embeds:[exampleEmbed] });
-	}
+	} 
+
+
+
+
+
+
+
+
+
+
 } else {
 	try {
 		await command.execute(interaction,client,content);
@@ -113,32 +124,45 @@ if (commandsData.find(x=>x.name == commandname).type == "owner") {
 	
 }})
 client.on('interactionCreate', async interaction => {
+	const jsonData = fs.readFileSync('config.json');
+	var data = JSON.parse(jsonData);
 	if (interaction.isCommand()){
 
     
 
 	const command = client.commands.get(interaction.commandName);
 
-	if (!command) return;
+	let commandname = interaction.commandName
 
 	if (!command) return;
-if (commandsData.find(x=>x.name == interaction.commandName).type == "owner") {
-	if (data.Owners.includes(interaction.member.id)||data.owner == interaction.member.id) {
+	let typess = ['owner','manager','admin']
+	
+if (typess.includes(commandsData.find(x=>x.name == commandname).type)) {
+	let typesss = [{name:"Owners",type:"owner"},{name:"Managers",type:"manager"},{name:"Admins",type:"admin"}]
+	let type = commandsData.find(x=>x.name == commandname).type
+	
+
+	
+	let roles = interaction.member.roles.member._roles
+	
+	if (data[typesss.find(x=>x.type == type).name].includes(interaction.member.id) || roles.some(element => data[typesss.find(x=>x.type == type).name].includes(element))) {
 		try {
 			await command.execute(interaction,client);
 		} catch (error) {
 			console.error(error);
 			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 		}
-	} else {
-		const exampleEmbed = new MessageEmbed()
-		.setColor('#0099ff')
-		.setTitle("عذرا ")
-		.setDescription(`هاذ الامر فقط الاونرز `)
-		.setTimestamp();
-		
-			await interaction.reply({embeds:[exampleEmbed] });
-	}
+	} 
+
+
+
+
+
+
+
+
+
+
 } else {
 	try {
 		await command.execute(interaction,client,content);

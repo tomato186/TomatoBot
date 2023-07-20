@@ -5,9 +5,11 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('add-owner')
-		.setDescription('add new bot owner')
-        .addUserOption(option => option.setName('owner').setDescription('Select a user').setRequired(true)),
+		.setName('add-manager')
+		.setDescription('add new bot manager')
+        .addUserOption(option => option.setName('manager').setDescription('Select a user'))
+        .addRoleOption(option => option.setName('role').setDescription('Select a role'))
+	,
 		type:"owner",
 	async execute(interaction,client,content) {
         const jsonData = fs.readFileSync('config.json');
@@ -15,16 +17,14 @@ module.exports = {
         if (data.owner !== interaction.member.id) {
             const exampleEmbed = new MessageEmbed()
             .setColor('#0099ff')
-            .setTitle(`اضافه اونر`)
+            .setTitle(`اضافه مانجر`)
             .setDescription(`عذرا انت لست بالاونر الاصلي للبوت لذا لا يمكنك استخدام الامر`)
             .setTimestamp();
             
                 await interaction.reply({embeds:[exampleEmbed] });
         }else {
-let cont = interaction.options&& interaction.options.getUser('owner') && interaction.options.getUser('owner').id || interaction.mentions.users && interaction.mentions.users.first() && interaction.mentions.users.first().id || interaction.guild.members.cache.get(content) && interaction.guild.members.cache.get(content).id
-console.log(cont)
-      
-var lastUsageTime = data.TimerOwner
+let cont = interaction.options&& interaction.options.getUser('manager') && interaction.options.getUser('manager').id ||interaction.options&& interaction.options.getRole('role') && interaction.options.getRole('role').id || interaction.mentions.users && interaction.mentions.users.first() && interaction.mentions.users.first().id || interaction.mentions.roles && interaction.mentions.roles.first() && interaction.mentions.roles.first().id || interaction.guild.members.cache.get(content) &&interaction.guild.members.cache.get(content).id  
+var lastUsageTime = data.TimerManager
 		var currentTime = new Date().getTime();
     if (cont) {
         if (currentTime - lastUsageTime >= 2* 60 * 1000 || lastUsageTime == 0) {
@@ -32,14 +32,14 @@ var lastUsageTime = data.TimerOwner
            
             const exampleEmbed = new MessageEmbed()
             .setColor('#0099ff')
-            .setTitle(`اضافه اونر جديد`)
-            .setDescription(`تمت اضافه اونر جديد للبوت بنجاح الاونر الجديد | <@${cont}>`)
+            .setTitle(`اضافه مانجير جديد`)
+            .setDescription(`تمت اضافه مانجر جديد للبوت بنجاح المانجر الجديد | <@${cont}>`)
             .setTimestamp();
             
                 await interaction.reply({embeds:[exampleEmbed] });
             // قم بتحديث وقت الاستخدام الأخير
-            data.TimerOwner = currentTime;
-        data.Owners.push(cont)
+            data.TimerManager = currentTime;
+        data.Managers.push(cont)
             // قم بتحديث الملف JSON مع الوقت الحالي
             
             fs.writeFileSync('config.json', JSON.stringify(data));
@@ -49,7 +49,7 @@ var lastUsageTime = data.TimerOwner
         
             const exampleEmbed = new MessageEmbed()
             .setColor('#0099ff')
-            .setTitle(`اضافه اونر `)
+            .setTitle(`اضافه مانجر `)
             .setDescription(`عذرا تم استخدام الامر مسبقا يرجئ انتظار مده قدرها
             <t:${time}:R>`)
             .setTimestamp();
