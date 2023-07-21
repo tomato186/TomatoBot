@@ -8,13 +8,13 @@ module.exports = {
         const jsonData = fs.readFileSync('reason.json');
         var data = JSON.parse(jsonData);
 		
-	console.log(interaction.components[0].components)
+	
 	let cmd = interaction.components[0].components[0].customId.split('-')[1]
-console.log(cmd)
+
 let reason = interaction.components[0].components[0].value
 let time = interaction.components[1].components[0].value
 let length = interaction.components[2].components[0].value
-console.log({reason,time,length})
+
 function convertTime(input) {
     const timeAbbreviations = {
       ms: 1,        // ملي ثانية

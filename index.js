@@ -3,11 +3,11 @@ const { Client, Intents,Collection ,MessageEmbed} = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_MEMBERS,Intents.FLAGS.GUILD_BANS,Intents.FLAGS.MESSAGE_CONTENT,Intents.FLAGS.GUILD_MESSAGES,Intents.FLAGS.GUILD_INTEGRATIONS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_MEMBERS,Intents.FLAGS.GUILD_BANS,Intents.FLAGS.MESSAGE_CONTENT,Intents.FLAGS.GUILD_MESSAGES,Intents.FLAGS.GUILD_INTEGRATIONS ,Intents.FLAGS.GUILD_INVITES] });
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 // When the client is ready, run this code (only once)
-let token =''
+let token = "";
 client.commands = new Collection();
 let commandsData = []
 const commandsPath = path.join(__dirname, 'commands');
@@ -73,6 +73,38 @@ client.on('ready', () => {
 	}
 })();
 });
+const jsonData3 = fs.readFileSync('mutes.json');
+	var data3 = JSON.parse(jsonData3);
+	console.log(data3)
+client.on("guildMemberAdd",async member=>{
+
+	const jsonData3 = fs.readFileSync('mutes.json');
+	var data3 = JSON.parse(jsonData3);
+let currentTime = new Date().getTime()
+let lastUsageTime = data3.members.find(x=>x.member == member.id).time
+console.log(lastUsageTime)
+if ( currentTime - lastUsageTime >= 2*60* 60 * 1000 ||  lastUsageTime == 0) {
+	// تم تجاوز المدة المسموح بها، قم بتنفيذ الفعل هن;
+console.log('كيبا عمك')
+
+  } else {
+	let muterole = member.guild.roles.cache.find(x=>x.name.toLowerCase() == "muted")
+     
+      if (!muterole) {
+        muterole = await member.guild.roles.create({
+        name: 'muted',
+      })
+      for (let index = 0; index < [...member.guild.channels.cache].length; index++) {
+        const channel = [...member.guild.channels.cache][index][1];
+        if(channel.isText()){
+          channel.permissionOverwrites.edit(muterole, { SEND_MESSAGES: false });
+        }}}
+		member.roles.add(muterole)
+	
+	
+	
+  }
+})
 client.on("messageCreate",async interaction=>{
 	const jsonData = fs.readFileSync('config.json');
 	var data = JSON.parse(jsonData);
@@ -89,11 +121,11 @@ client.on("messageCreate",async interaction=>{
 if (typess.includes(commandsData.find(x=>x.name == commandname).type)) {
 	let typesss = [{name:"Owners",type:"owner"},{name:"Managers",type:"manager"},{name:"Admins",type:"admin"}]
 	let type = commandsData.find(x=>x.name == commandname).type
-	console.log(type)
 
-	console.log(typesss.find(x=>x.type == type).name)
+	
+	
 	let roles = interaction.member.roles.member._roles
-	console.log(roles)
+
 	if (data[typesss.find(x=>x.type == type).name].includes(interaction.member.id) || roles.some(element => data[typesss.find(x=>x.type == type).name].includes(element))) {
 		try {
 			await command.execute(interaction,client,content);
