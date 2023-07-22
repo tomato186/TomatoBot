@@ -3,40 +3,35 @@ const path = require('node:path');
 const { MessageActionRow, MessageSelectMenu , MessageEmbed , Modal , TextInputComponent} = require('discord.js');
 
 module.exports = {
-	name:'reason',
+	name:'status',
 	async execute(interaction,client) {
 		
 		let value = interaction.values[0]
-		console.log(value)
 		const modal = new Modal()
-			.setCustomId('reason')
-			.setTitle('add new reason');
+			.setCustomId('status')
+			.setTitle('set new status');
+            let name = "name"
+            if (value == "streaming") name = "url";
 		// Add components to modal
 		// Create the text input components
-		const favoriteColorInput = new TextInputComponent()
-			.setCustomId(`reason-${value}`)
+            const favoriteColorInput2 = new TextInputComponent()
+			.setCustomId(`status-${value}`)
 		    // The label is the prompt the user sees for this input
-			.setLabel("reason")
-		    // Short means only a single line of text
-			.setStyle('PARAGRAPH');
-		const hobbiesInput = new TextInputComponent()
-			.setCustomId('Time')
-			.setLabel("Time")
-		    // Paragraph means multiple lines of text.
+			.setLabel("status")
+		    // Short means only a single line of text?
 			.setStyle('SHORT');
             const hobbiesInput2 = new TextInputComponent()
-			.setCustomId('Length')
-			.setLabel("length")
+			.setCustomId(`${name}-${value}`)
+			.setLabel(`${name}`)
 		    // Paragraph means multiple lines of text.
-			.setStyle('SHORT');
+			.setStyle('PARAGRAPH');
 		// An action row only holds one text input,
 		// so you need one action row per text input.
-		const firstActionRow = new MessageActionRow().addComponents(favoriteColorInput);
-		const secondActionRow = new MessageActionRow().addComponents(hobbiesInput);
+		const secondActionRow = new MessageActionRow().addComponents(favoriteColorInput2);
 		const secondActionRow3 = new MessageActionRow().addComponents(hobbiesInput2);
 		
 		// Add inputs to the modal
-		modal.addComponents(firstActionRow, secondActionRow,secondActionRow3);
+		modal.addComponents(secondActionRow,secondActionRow3);
 		// Show the modal to the user
 		await interaction.showModal(modal);
 	

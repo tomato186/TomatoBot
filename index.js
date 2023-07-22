@@ -54,9 +54,52 @@ for (const file of modalFiles) {
 
     client.modal.set(modal.name, modal);
 }
-client.on('ready', () => {
+
+client.on('ready',async () => {
+	const jsonData2 = fs.readFileSync('status.json');
+	var data2 = JSON.parse(jsonData2);
+	if (data2.url) {
+		client.user.setPresence({ activities: [{ url: data2.url , type: data2.presence.toUpperCase() }], status: data2.status });
+	
+	} else {
+		client.user.setPresence({ activities: [{ name: data2.name , type: data2.presence.toUpperCase() }], status: data2.status });
+	
+	}
+		
 	console.log('Ready!');
     const rest = new REST({ version: '9' }).setToken(token);
+
+
+	setInterval(async()=>{
+		let guild = client.guilds.cache.get("1118285476323926056");
+	const jsonData3 = fs.readFileSync('mutes.json');
+	var data3 = JSON.parse(jsonData3);
+let currentTime = new Date().getTime()
+for (let index = 0; index < data3.members.length; index++) {
+	
+	let membe = await guild.members.fetch({ user:data3.members[index].member, cache: false })
+
+	
+let roles = membe.roles.member._roles
+let lastUsageTime = data3.members[index].time
+let timereason = data3.members.find(x=>x.member == membe.id).timereason
+
+if ( currentTime - lastUsageTime >= timereason ||  lastUsageTime == 0) {
+	// تم تجاوز المدة المسموح بها، قم بتنفيذ الفعل هن;
+
+
+data3.members = data3.members.filter(x => x.member !== `${membe.id}`);
+
+let muterole = membe.guild.roles.cache.find(x=>x.name.toLowerCase() == "muted")
+ 
+
+if(roles.includes(muterole.id)){
+		membe.roles.remove(muterole)
+	}
+fs.writeFileSync('mutes.json', JSON.stringify(data3));
+ } 
+}
+},15000);
 
 (async () => {
 	try {
@@ -73,21 +116,29 @@ client.on('ready', () => {
 	}
 })();
 });
-const jsonData3 = fs.readFileSync('mutes.json');
-	var data3 = JSON.parse(jsonData3);
-	console.log(data3)
+
 client.on("guildMemberAdd",async member=>{
 
 	const jsonData3 = fs.readFileSync('mutes.json');
 	var data3 = JSON.parse(jsonData3);
 let currentTime = new Date().getTime()
-let lastUsageTime = data3.members.find(x=>x.member == member.id).time
-console.log(lastUsageTime)
-if ( currentTime - lastUsageTime >= 2*60* 60 * 1000 ||  lastUsageTime == 0) {
-	// تم تجاوز المدة المسموح بها، قم بتنفيذ الفعل هن;
-console.log('كيبا عمك')
+let mem = data3.members.find(x=>x.member == member.id)
 
-  } else {
+if (!mem) {
+	
+} else {
+	let lastUsageTime = data3.members.find(x=>x.member == member.id).time
+
+
+let timereason = data3.members.find(x=>x.member == member.id).timereason
+
+if ( currentTime - lastUsageTime >= timereason ||  lastUsageTime == 0) {
+	// تم تجاوز المدة المسموح بها، قم بتنفيذ الفعل هن;
+
+data3.members = data3.members.filter(x => x.member !== `${member.id}`);
+
+fs.writeFileSync('mutes.json', JSON.stringify(data3));
+ } else {
 	let muterole = member.guild.roles.cache.find(x=>x.name.toLowerCase() == "muted")
      
       if (!muterole) {
@@ -104,6 +155,7 @@ console.log('كيبا عمك')
 	
 	
   }
+}
 })
 client.on("messageCreate",async interaction=>{
 	const jsonData = fs.readFileSync('config.json');
@@ -121,12 +173,15 @@ client.on("messageCreate",async interaction=>{
 if (typess.includes(commandsData.find(x=>x.name == commandname).type)) {
 	let typesss = [{name:"Owners",type:"owner"},{name:"Managers",type:"manager"},{name:"Admins",type:"admin"}]
 	let type = commandsData.find(x=>x.name == commandname).type
-
-	
-	
 	let roles = interaction.member.roles.member._roles
 
-	if (data[typesss.find(x=>x.type == type).name].includes(interaction.member.id) || roles.some(element => data[typesss.find(x=>x.type == type).name].includes(element))) {
+let typeowner = data["Owners"].includes(interaction.member.id) || roles.some(element => data["Owners"].includes(element))
+let typemanag = data["Managers"].includes(interaction.member.id) || roles.some(element => data["Managers"].includes(element))
+let typeadmin = data["Admins"].includes(interaction.member.id) || roles.some(element => data["Admins"].includes(element))
+
+	
+	
+	if (type == "admin"&&typeadmin || type == "admin"&&typemanag || type == "admin"&&typeowner || type == "manager"&&typemanag || type == "manager"&&typeowner || type == "owner"&&typeowner) {
 		try {
 			await command.execute(interaction,client,content);
 		} catch (error) {
@@ -172,12 +227,15 @@ client.on('interactionCreate', async interaction => {
 if (typess.includes(commandsData.find(x=>x.name == commandname).type)) {
 	let typesss = [{name:"Owners",type:"owner"},{name:"Managers",type:"manager"},{name:"Admins",type:"admin"}]
 	let type = commandsData.find(x=>x.name == commandname).type
-	
+	let roles = interaction.member.roles.member._roles
+
+let typeowner = data["Owners"].includes(interaction.member.id) || roles.some(element => data["Owners"].includes(element))
+let typemanag = data["Managers"].includes(interaction.member.id) || roles.some(element => data["Managers"].includes(element))
+let typeadmin = data["Admins"].includes(interaction.member.id) || roles.some(element => data["Admins"].includes(element))
 
 	
-	let roles = interaction.member.roles.member._roles
 	
-	if (data[typesss.find(x=>x.type == type).name].includes(interaction.member.id) || roles.some(element => data[typesss.find(x=>x.type == type).name].includes(element))) {
+	if (type == "admin"&&typeadmin || type == "admin"&&typemanag || type == "admin"&&typeowner || type == "manager"&&typemanag || type == "manager"&&typeowner || type == "owner"&&typeowner) {
 		try {
 			await command.execute(interaction,client);
 		} catch (error) {
