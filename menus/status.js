@@ -21,17 +21,27 @@ module.exports = {
 		    // Short means only a single line of text?
 			.setStyle('SHORT');
             const hobbiesInput2 = new TextInputComponent()
-			.setCustomId(`${name}-${value}`)
-			.setLabel(`${name}`)
+			.setCustomId(`name-${value}`)
+			.setLabel(`name`)
+
 		    // Paragraph means multiple lines of text.
 			.setStyle('PARAGRAPH');
+            const hobbiesInput = new TextInputComponent()
+			.setCustomId(`${name}-${value}`)
+			.setLabel(`${name}`)
+
+		    // Paragraph means multiple lines of text.
+			.setStyle('PARAGRAPH');
+            
 		// An action row only holds one text input,
 		// so you need one action row per text input.
 		const secondActionRow = new MessageActionRow().addComponents(favoriteColorInput2);
-		const secondActionRow3 = new MessageActionRow().addComponents(hobbiesInput2);
+		const secondActionRow2 = new MessageActionRow().addComponents(favoriteColorInput);
+		
+        const secondActionRow3 = new MessageActionRow().addComponents(hobbiesInput2);
 		
 		// Add inputs to the modal
-		modal.addComponents(secondActionRow,secondActionRow3);
+		modal.addComponents(secondActionRow,secondActionRow2,secondActionRow3);
 		// Show the modal to the user
 		await interaction.showModal(modal);
 	

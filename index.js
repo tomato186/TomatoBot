@@ -7,7 +7,7 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_M
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 // When the client is ready, run this code (only once)
-let token = "";
+let token = "MTEyNDQ1Njc5MDM2MTM3ODg2OA.GAv6kp.BS0loe1FwlkYeHwHq6qZ6CdZR13CrfFqz9obYU";
 client.commands = new Collection();
 let commandsData = []
 const commandsPath = path.join(__dirname, 'commands');
@@ -58,8 +58,9 @@ for (const file of modalFiles) {
 client.on('ready',async () => {
 	const jsonData2 = fs.readFileSync('status.json');
 	var data2 = JSON.parse(jsonData2);
-	if (data2.url) {
-		client.user.setPresence({ activities: [{ url: data2.url , type: data2.presence.toUpperCase() }], status: data2.status });
+	
+	if (data2.url && data2.presence =="streaming") {
+		client.user.setPresence({ activities: [{name:data2.name,url: data2.url , type: data2.presence.toUpperCase() }], status: data2.status });
 	
 	} else {
 		client.user.setPresence({ activities: [{ name: data2.name , type: data2.presence.toUpperCase() }], status: data2.status });
