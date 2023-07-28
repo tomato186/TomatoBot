@@ -7,7 +7,22 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_M
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 // When the client is ready, run this code (only once)
-let token = "MTEyNDQ1Njc5MDM2MTM3ODg2OA.GAv6kp.BS0loe1FwlkYeHwHq6qZ6CdZR13CrfFqz9obYU";
+let token ='';
+const guildInvites = new Map()
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	
+		client.on(event.name, (...args) => event.execute(...args,client,guildInvites));
+}
+
+
+
+
+
 client.commands = new Collection();
 let commandsData = []
 const commandsPath = path.join(__dirname, 'commands');
@@ -55,7 +70,24 @@ for (const file of modalFiles) {
     client.modal.set(modal.name, modal);
 }
 
+
 client.on('ready',async () => {
+	
+
+// Next, we are going to fetch invites for every guild and add them to our map.
+client.guilds.cache.forEach(guild => {
+	guild.invites.fetch()
+		.then(invites => {
+			console.log("INVITES CACHED");
+			const codeUses = new Map();
+			invites.each(inv => codeUses.set(inv.code, inv.uses));
+
+			guildInvites.set(guild.id, codeUses);
+		})
+		.catch(err => {
+			console.log("OnReady Error:", err)
+		})
+})
 	const jsonData2 = fs.readFileSync('status.json');
 	var data2 = JSON.parse(jsonData2);
 	
