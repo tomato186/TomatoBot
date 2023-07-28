@@ -7,7 +7,7 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_M
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 // When the client is ready, run this code (only once)
-let token ='';
+let token ="";
 const guildInvites = new Map()
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
@@ -214,7 +214,7 @@ let typeadmin = data["Admins"].includes(interaction.member.id) || roles.some(ele
 
 	
 	
-	if (type == "admin"&&typeadmin || type == "admin"&&typemanag || type == "admin"&&typeowner || type == "manager"&&typemanag || type == "manager"&&typeowner || type == "owner"&&typeowner) {
+	if (type =='log'&& typeowner || type == "admin"&&typeadmin || type == "admin"&&typemanag || type == "admin"&&typeowner || type == "manager"&&typemanag || type == "manager"&&typeowner || type == "owner"&&typeowner) {
 		try {
 			await command.execute(interaction,client,content);
 		} catch (error) {

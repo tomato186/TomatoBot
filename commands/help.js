@@ -24,11 +24,20 @@ module.exports = {
                         description: 'send manager commands list',
                         value: 'manager',
                     },
-                    ,
                     {
                         label: 'admin',
                         description: 'send admin commands list',
                         value: 'admin',
+                    },
+                    {
+                        label: 'log',
+                        description: 'send log commands list',
+                        value: 'log',
+                    },
+                    {
+                        label: 'event',
+                        description: 'send event commands list',
+                        value: 'event',
                     }
 
                 ]),

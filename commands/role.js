@@ -33,7 +33,13 @@ if (role && member) {
     }else{
         if (hasit.includes(role.id)) {
             member.roles.remove(role).then(async x=>{
-                await interaction.react("✅")
+                
+                const exampleEmbed = new MessageEmbed()
+                .setColor('#0099ff')
+                
+                .setDescription(`تم تغيير الرولات لـ ${member.user.username}, -${role.name} :white_check_mark:`)
+                .setTimestamp();
+                await interaction.reply({embeds:[exampleEmbed]})
             }).catch(async x=>{
                 await interaction.react("❌")
           
@@ -41,7 +47,12 @@ if (role && member) {
             })
         } else {
             member.roles.add(role).then(async x=>{
-                await interaction.react("✅")
+                const exampleEmbed = new MessageEmbed()
+                .setColor('#0099ff')
+                
+                .setDescription(`تم تغيير الرولات لـ ${member.user.username}, +${role.name} :white_check_mark:`)
+                .setTimestamp();
+                await interaction.reply({embeds:[exampleEmbed]})
             }).catch(async x=>{
                 await interaction.react("❌")
           
