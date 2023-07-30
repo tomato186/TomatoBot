@@ -42,7 +42,7 @@ var lastUsageTime = data.TimerOwner
         data.Owners.push(cont)
             // قم بتحديث الملف JSON مع الوقت الحالي
             
-            fs.writeFileSync('config.json', JSON.stringify(data));
+            fs.writeFileSync('config.json', JSON.stringify(data,null,2));
           } else {
             let time =Math.floor((lastUsageTime + 2*60 * 1000 ) / 1000)
             // لم يتم السماح باستخدام الفعل حاليًا، يمكنك اتخاذ إجراء آخر هنا

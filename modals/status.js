@@ -45,7 +45,7 @@ const exampleEmbed = new MessageEmbed()
         }
             
 			await interaction.reply({embeds:[exampleEmbed] , });
-            fs.writeFileSync('status.json', JSON.stringify(data));
+            fs.writeFileSync('status.json', JSON.stringify(data,null,2));
 	
 
 },

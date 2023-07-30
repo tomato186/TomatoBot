@@ -106,7 +106,7 @@ let typeadmin = data2["Admins"].includes(interaction.member.id) || roles.some(el
         reason:data['mute'][parseFloat(m) - 1].reason, 
         guild:member.guild.id
       })
-      fs.writeFileSync('mutes.json', JSON.stringify(data3));
+      fs.writeFileSync('mutes.json', JSON.stringify(data3,null,2));
                     console.log(`Collected ${m.content}`);
                 });
                 

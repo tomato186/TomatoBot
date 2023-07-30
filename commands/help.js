@@ -5,7 +5,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('help')
 		.setDescription('send help list for you'),
-        type:"owner",
+        type:"admin",
 	async execute(interaction,client) {
 		
         const row = new MessageActionRow()

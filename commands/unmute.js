@@ -36,7 +36,7 @@ let roles = member.roles.member._roles
 if(roles.includes(muterole.id)){
 		member.roles.remove(muterole)
         await interaction.react("✅")
-        fs.writeFileSync('mutes.json', JSON.stringify(data3));
+        fs.writeFileSync('mutes.json', JSON.stringify(data3,null,2));
 	}else{
         await interaction.react("❌")
     }

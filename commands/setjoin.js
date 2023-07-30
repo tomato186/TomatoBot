@@ -20,7 +20,7 @@ if (cont) {
     await interaction.react("✅")
         // قم بتحديث الملف JSON مع الوقت الحالي
         
-        fs.writeFileSync('logs.json', JSON.stringify(data));
+        fs.writeFileSync('logs.json', JSON.stringify(data,null,2));
 } else {
     await interaction.react("❌")
 }

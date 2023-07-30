@@ -73,7 +73,7 @@ const exampleEmbed = new MessageEmbed()
         { name: `Length`, value: `${length}` },
 		)
 			await interaction.reply({embeds:[exampleEmbed] , });
-            fs.writeFileSync('reason.json', JSON.stringify(data));
+            fs.writeFileSync('reason.json', JSON.stringify(data,null,2));
 	
 }
 },

@@ -129,7 +129,7 @@ let muterole = membe.guild.roles.cache.find(x=>x.name.toLowerCase() == "muted")
 if(roles.includes(muterole.id)){
 		membe.roles.remove(muterole)
 	}
-fs.writeFileSync('mutes.json', JSON.stringify(data3));
+fs.writeFileSync('mutes.json', JSON.stringify(data3,null,2));
  } 
 }
 },15000);
@@ -170,7 +170,7 @@ if ( currentTime - lastUsageTime >= timereason ||  lastUsageTime == 0) {
 
 data3.members = data3.members.filter(x => x.member !== `${member.id}`);
 
-fs.writeFileSync('mutes.json', JSON.stringify(data3));
+fs.writeFileSync('mutes.json', JSON.stringify(data3,null,2));
  } else {
 	let muterole = member.guild.roles.cache.find(x=>x.name.toLowerCase() == "muted")
      
