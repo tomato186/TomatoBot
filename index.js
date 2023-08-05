@@ -208,7 +208,7 @@ if (typess.includes(commandsData.find(x=>x.name == commandname).type)) {
 	let type = commandsData.find(x=>x.name == commandname).type
 	let roles = interaction.member.roles.member._roles
 
-let typeowner = data["Owners"].includes(interaction.member.id) || roles.some(element => data["Owners"].includes(element))
+let typeowner = data["Owners"].includes(interaction.member.id) || roles.some(element => data["Owners"].includes(element)) 
 let typemanag = data["Managers"].includes(interaction.member.id) || roles.some(element => data["Managers"].includes(element))
 let typeadmin = data["Admins"].includes(interaction.member.id) || roles.some(element => data["Admins"].includes(element))
 

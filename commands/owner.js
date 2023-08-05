@@ -12,6 +12,7 @@ module.exports = {
 	async execute(interaction,client,content) {
         const jsonData = fs.readFileSync('config.json');
         var data = JSON.parse(jsonData);
+        
         if (data.owner !== interaction.member.id) {
             const exampleEmbed = new MessageEmbed()
             .setColor('#0099ff')
@@ -27,9 +28,7 @@ console.log(cont)
 var lastUsageTime = data.TimerOwner
 		var currentTime = new Date().getTime();
     if (cont) {
-        if (currentTime - lastUsageTime >= 2* 60 * 1000 || lastUsageTime == 0) {
-            // تم تجاوز المدة المسموح بها، قم بتنفيذ الفعل هنا
-           
+       
             const exampleEmbed = new MessageEmbed()
             .setColor('#0099ff')
             .setTitle(`اضافه اونر جديد`)
@@ -38,25 +37,12 @@ var lastUsageTime = data.TimerOwner
             
                 await interaction.reply({embeds:[exampleEmbed] });
             // قم بتحديث وقت الاستخدام الأخير
-            data.TimerOwner = currentTime;
+            
         data.Owners.push(cont)
             // قم بتحديث الملف JSON مع الوقت الحالي
             
             fs.writeFileSync('config.json', JSON.stringify(data,null,2));
-          } else {
-            let time =Math.floor((lastUsageTime + 2*60 * 1000 ) / 1000)
-            // لم يتم السماح باستخدام الفعل حاليًا، يمكنك اتخاذ إجراء آخر هنا
         
-            const exampleEmbed = new MessageEmbed()
-            .setColor('#0099ff')
-            .setTitle(`اضافه اونر `)
-            .setDescription(`عذرا تم استخدام الامر مسبقا يرجئ انتظار مده قدرها
-            <t:${time}:R>`)
-            .setTimestamp();
-            
-                await interaction.reply({embeds:[exampleEmbed] });
-          
-          }
     } else {
         
     }    
